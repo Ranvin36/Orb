@@ -6,7 +6,7 @@ import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.lib.TextProgressMonitor;
-import org.orb.cli.Utils;
+import org.orb.cli.util.Utils;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 

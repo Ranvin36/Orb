@@ -1,4 +1,4 @@
-package org.orb.cli;
+package org.orb.cli.util;
 
 import java.io.IOException;
 import java.nio.file.Files;
