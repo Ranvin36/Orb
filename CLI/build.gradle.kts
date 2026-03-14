@@ -17,6 +17,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation("info.picocli:picocli:4.7.4")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
     implementation("org.eclipse.jgit:org.eclipse.jgit:7.4.0.202509020913-r")
     runtimeOnly("org.slf4j:slf4j-simple:2.0.16")
 }
