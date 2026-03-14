@@ -1,0 +1,26 @@
+package org.orb.cli;
+
+import org.orb.cli.commands.AddCommand;
+import org.orb.cli.commands.ServeCommand;
+import picocli.CommandLine;
+import picocli.CommandLine.Command;
+
+@Command(
+        name = "orb",
+        description = "ORB Cli - Code Intelligence Platform",
+        mixinStandardHelpOptions = true,
+        subcommands = {AddCommand.class, ServeCommand.class}
+)
+public class OrbCLI {
+    public static void main(String[] args) {
+        CommandLine commandLine = new CommandLine(new OrbCLI());
+        if (args.length == 0) {
+            commandLine.usage(System.out);
+            return;
+        }
+
+        int exitCode = commandLine.execute(args);
+        System.exit(exitCode);
+    }
+
+}
