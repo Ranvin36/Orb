@@ -1,10 +1,17 @@
 package org.orb.cli.commands;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.orb.cli.Models.IndexRequest;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.Command;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,6 +45,34 @@ public class ServeCommand implements Runnable {
                 System.err.println("Error: Unable to access repository directory: " + repoPath);
                 e.printStackTrace();
                 return;
+            }
+
+            HttpClient httpClient = HttpClient.newBuilder().build();
+            ObjectMapper objectMapper = new ObjectMapper();
+            IndexRequest body = new IndexRequest(repoName);
+            String requestBody = null;
+            try {
+                requestBody = objectMapper.writeValueAsString(body);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8080/indexing/start"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+            try {
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                System.out.println("Indexing request sent for: " + repoName);
+                System.out.println("Request body: " + requestBody);
+                System.out.println("Response status: " + response.statusCode());
+                System.out.println("Response body: " + response.body());
+            } catch (IOException e) {
+                System.err.println("Error: Failed to call indexing service. Is it running at http://localhost:8080?");
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                System.err.println("Error: Request was interrupted.");
             }
         }
     }
