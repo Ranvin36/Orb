@@ -6,16 +6,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public class IndexEngineService {
+import org.springframework.stereotype.Service;
 
-    public void findRepositoryInFileSystem(String repositoryName) throws IOException {
-        Optional<Path> repo = locateRepositoryInFileSystem(repositoryName);
-        if (repo.isPresent()) {
-            System.out.println("Repository found at: " + repo.get().toString());
-        } else {
-            System.out.println("Repository not found in the file system.");
-        }
-    }
+@Service
+public class IndexEngineService {
 
     /**
      * Locates the repository directory under the user's Documents folder.
@@ -32,7 +26,7 @@ public class IndexEngineService {
             return Optional.empty();
         }
 
-        Path repoPath = Path.of(userHome, "Documents", repositoryName);
+        Path repoPath = Path.of(userHome, "Documents","orb",repositoryName);
 
         if (Files.exists(repoPath) && Files.isDirectory(repoPath)) {
             // Use DirectoryStream to avoid leaving an open stream
@@ -49,14 +43,18 @@ public class IndexEngineService {
         return Optional.empty();
     }
 
-    public void startIndexing(String repoName) throws IOException {
+    public void parseRepository(Path repoPath) {
+    }
+
+    public Optional<Path> startIndexing(String repoName) throws IOException {
         Optional<Path> repo = locateRepositoryInFileSystem(repoName);
         if (repo.isPresent()) {
             System.out.println("Starting indexing for: " + repo.get().toString());
-            // indexing logic would go here
+            return repo;
         } else {
             System.out.println("Cannot start indexing; repository not found: " + repoName);
         }
+        return Optional.empty();
 
     }
 }

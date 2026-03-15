@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/indexing")
@@ -20,7 +22,7 @@ public class IndexingController {
     @RequestMapping("/start")
     @ResponseBody
     public String startIndexing(@RequestBody Repository repository) throws IOException {
-        indexEngineService.startIndexing(repository.getName());
-        return "Indexing process started for repository: " + repository.getName();
+        Optional<Path>  repoPath = indexEngineService.startIndexing(repository.getName());
+        return "Indexing process started for repository: " + repoPath;
     }
 }
